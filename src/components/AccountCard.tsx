@@ -1,19 +1,22 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import AppText from './AppText';
 import {Account} from '../config/interfaces';
 
 interface Props {
   account: Account;
+  onPress?: () => void;
 }
 
-const AccountCard = ({account}: Props) => {
+const AccountCard = ({account, onPress}: Props) => {
   //   const width = Dimensions.get('window').width;
   return (
-    <View style={[styles.container]}>
-      <AppText>{account.name}</AppText>
-    </View>
+    <TouchableOpacity onPress={onPress} activeOpacity={0.9}>
+      <View style={[styles.container]}>
+        <AppText>{account.name}</AppText>
+      </View>
+    </TouchableOpacity>
   );
 };
 

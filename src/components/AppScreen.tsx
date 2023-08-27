@@ -1,9 +1,9 @@
 import React from 'react';
 import {Platform, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
 
-interface Props {
-  children: React.ReactNode;
-}
+import {ChildrenProp} from '../config/interfaces';
+
+interface Props extends ChildrenProp {}
 
 const AppScreen = ({children}: Props) => {
   return (

@@ -22,6 +22,7 @@ interface Props {
     | 'UltraThinItalic';
   fontType?: 'Display' | 'Text';
   size?: number;
+  color?: string;
   textStyles?: TextStyle;
 }
 
@@ -31,6 +32,7 @@ const AppText = ({
   size = 17,
   textStyles,
   fontType = 'Display',
+  color = '#000',
 }: Props) => {
   return (
     <Text
@@ -39,6 +41,7 @@ const AppText = ({
         {
           fontFamily: `SF-Pro-${fontType}-${weight}`,
           fontSize: size,
+          color,
         },
         textStyles,
       ]}>
