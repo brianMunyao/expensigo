@@ -1,12 +1,5 @@
-import {
-  Dimensions,
-  KeyboardAvoidingView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
-import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
@@ -21,6 +14,7 @@ import AppDropdown from '../components/AppDropdown';
 import AppButton from '../components/AppButton';
 import {Category} from '../config/schemas';
 import IconPicker from '../components/IconPicker';
+import AppModal from '../components/AppModal';
 
 interface Props {}
 
@@ -57,59 +51,45 @@ const NewCategoryModal = ({}: Props) => {
   };
 
   return (
-    <Modal
-      deviceHeight={Dimensions.get('screen').height}
-      isVisible={newCategoryModal}
-      statusBarTranslucent
-      useNativeDriver
-      useNativeDriverForBackdrop
-      animationIn="bounceInUp"
-      animationInTiming={700}
-      animationOut="bounceOutDown"
-      animationOutTiming={500}
-      onBackButtonPress={closeModal}
-      onBackdropPress={closeModal}
-      style={styles.modal}>
-      <KeyboardAvoidingView behavior="height">
-        <View style={styles.container}>
-          <AppText weight="Bold" size={20}>
-            New Category
-          </AppText>
+    <AppModal isVisible={newCategoryModal} closeModal={closeModal}>
+      <AppText weight="Bold" size={20}>
+        New Category
+      </AppText>
 
-          <InputContainer label="Title">
-            <AppInput
-              placeholder="Enter Title"
-              value={title}
-              onChangeText={value => setTitle(value)}
-            />
-          </InputContainer>
+      <InputContainer label="Title">
+        <AppInput
+          placeholder="Enter Title"
+          value={title}
+          onChangeText={value => setTitle(value)}
+        />
+      </InputContainer>
 
-          <InputContainer label="Transaction Type">
-            <AppDropdown
-              data={[
-                {
-                  label: 'Income',
-                  value: 1,
-                  Icon: <Feather name="download" size={14} />,
-                },
-                {
-                  label: 'Expense',
-                  value: 2,
-                  Icon: <Feather name="upload" size={14} />,
-                },
-              ]}
-              renderItem={item => (
-                <AppText>
-                  {item.Icon} {item.label}
-                </AppText>
-              )}
-              value={categoryType}
-              onChange={item => setCategoryType(item.value)}
-            />
-          </InputContainer>
+      <InputContainer label="Transaction Type">
+        <AppDropdown
+          data={[
+            {
+              label: 'Income',
+              value: 1,
+              Icon: <Feather name="download" size={14} />,
+            },
+            {
+              label: 'Expense',
+              value: 2,
+              Icon: <Feather name="upload" size={14} />,
+            },
+          ]}
+          renderItem={item => (
+            <AppText>
+              {item.Icon} {item.label}
+            </AppText>
+          )}
+          value={categoryType}
+          onChange={item => setCategoryType(item.value)}
+        />
+      </InputContainer>
 
-          <View style={styles.colorIcon}>
-            {/* <InputContainer
+      <View style={styles.colorIcon}>
+        {/* <InputContainer
               label="Category Color"
               style={styles.colorIconInner}>
               <View>
@@ -117,14 +97,14 @@ const NewCategoryModal = ({}: Props) => {
               </View>
             </InputContainer> */}
 
-            <InputContainer label="Category Icon" style={styles.colorIconInner}>
-              <TouchableOpacity onPress={() => setIsIconPickerVisible(true)}>
-                <MaterialCommunityIcon name={icon} size={30} />
-              </TouchableOpacity>
-            </InputContainer>
-          </View>
+        <InputContainer label="Category Icon" style={styles.colorIconInner}>
+          <TouchableOpacity onPress={() => setIsIconPickerVisible(true)}>
+            <MaterialCommunityIcon name={icon} size={30} />
+          </TouchableOpacity>
+        </InputContainer>
+      </View>
 
-          {/* <InputContainer label="Initial Balance">
+      {/* <InputContainer label="Initial Balance">
             <AppInput
               inputMode="decimal"
               placeholder="0.00"
@@ -133,34 +113,18 @@ const NewCategoryModal = ({}: Props) => {
             />
           </InputContainer> */}
 
-          <AppButton label="Create" onPress={createCategory} />
-        </View>
-      </KeyboardAvoidingView>
+      <AppButton label="Create" onPress={createCategory} />
 
       <IconPicker
         isVisible={isIconPickerVisible}
         closeModal={() => setIsIconPickerVisible(false)}
         chooseIcon={setIcon}
       />
-    </Modal>
+    </AppModal>
   );
 };
 
 const styles = StyleSheet.create({
-  modal: {
-    margin: 0,
-  },
-  container: {
-    marginTop: 'auto',
-    height: 'auto',
-    backgroundColor: '#fff',
-    // borderTopRightRadius: 20,
-    // borderTopLeftRadius: 20,
-    borderRadius: 20,
-    padding: 20,
-    display: 'flex',
-    gap: 15,
-  },
   colorIcon: {
     display: 'flex',
     flexDirection: 'row',

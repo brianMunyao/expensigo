@@ -1,7 +1,6 @@
-import {Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import Modal from 'react-native-modal';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -99,122 +98,108 @@ const NewTransactionModal = ({}: Props) => {
   //   });
 
   return (
-    <Modal
-      deviceHeight={Dimensions.get('screen').height}
-      isVisible={newTransactionModal}
-      statusBarTranslucent
-      useNativeDriver
-      useNativeDriverForBackdrop
-      animationIn="bounceInUp"
-      animationInTiming={700}
-      animationOut="bounceOutDown"
-      animationOutTiming={500}
-      onBackButtonPress={closeModal}
-      onBackdropPress={closeModal}
-      style={styles.modal}>
-      <View style={styles.container}>
-        <View style={styles.topBar}>
-          <AppText weight="Bold" size={23}>
-            New Transaction
-          </AppText>
+    <AppModal isVisible={newTransactionModal} closeModal={closeModal}>
+      <View style={styles.topBar}>
+        <AppText weight="Bold" size={23}>
+          New Transaction
+        </AppText>
 
-          <TouchableOpacity onPress={closeModal}>
-            <Ionicon name="close" size={30} color="#000" />
-          </TouchableOpacity>
-        </View>
-
-        <View style={styles.inputs}>
-          <InputContainer label="Transaction Type">
-            <AppDropdown
-              data={[
-                {
-                  label: 'Income',
-                  value: 1,
-                  Icon: <Feather name="download" size={14} />,
-                },
-                {
-                  label: 'Expense',
-                  value: 2,
-                  Icon: <Feather name="upload" size={14} />,
-                },
-              ]}
-              renderItem={item => (
-                <AppText>
-                  {item.Icon} {item.label}
-                </AppText>
-              )}
-              value={transactionType}
-              onChange={item => setTransactionType(item.value)}
-            />
-          </InputContainer>
-          <InputContainer label="Account">
-            <AppDropdown
-              placeholder="Select Account"
-              data={accounts.map(a => ({label: a.name, value: a._id}))}
-              renderItem={item => <AppText>{item.label}</AppText>}
-              value={account}
-              onChange={item => setAccount(item.value)}
-            />
-          </InputContainer>
-          <InputContainer label="Category">
-            <AppDropdown
-              placeholder="Select Category"
-              data={categories.map(c => ({
-                label: c.name,
-                value: c._id,
-                Icon: <Ionicon name={c.icon} />,
-              }))}
-              renderItem={item => (
-                <AppText>
-                  {item.Icon} {item.label}
-                </AppText>
-              )}
-              value={category}
-              onChange={item => setCategory(item.value)}
-            />
-          </InputContainer>
-
-          <InputContainer label="Amount">
-            <AppInput
-              inputMode="decimal"
-              placeholder="Enter Amount"
-              value={amount}
-              onChangeText={value => setAmount(value)}
-            />
-          </InputContainer>
-
-          <InputContainer label="Date">
-            <TouchableOpacity onPress={() => setDateModal(true)}>
-              <AppText>{transactionDate.format('DD-MM-YYYY')}</AppText>
-            </TouchableOpacity>
-          </InputContainer>
-
-          <AppModal
-            visible={dateModal}
-            close={() => setDateModal(false)}
-            style={styles.dateModal}>
-            <View style={styles.dateModalInner}>
-              <CalendarPicker
-                selectedStartDate={transactionDate.toDate()}
-                onDateChange={d => {
-                  setTransactionDate(d);
-                  setDateModal(false);
-                }}
-              />
-            </View>
-          </AppModal>
-          <InputContainer label="Description">
-            <AppInput
-              multiline
-              placeholder="Description (Optional)"
-              value={description}
-              onChangeText={value => setDescription(value)}
-            />
-          </InputContainer>
-          <AppButton label="Add" onPress={createTransaction} />
-        </View>
+        <TouchableOpacity onPress={closeModal}>
+          <Ionicon name="close" size={30} color="#000" />
+        </TouchableOpacity>
       </View>
-    </Modal>
+
+      <View style={styles.inputs}>
+        <InputContainer label="Transaction Type">
+          <AppDropdown
+            data={[
+              {
+                label: 'Income',
+                value: 1,
+                Icon: <Feather name="download" size={14} />,
+              },
+              {
+                label: 'Expense',
+                value: 2,
+                Icon: <Feather name="upload" size={14} />,
+              },
+            ]}
+            renderItem={item => (
+              <AppText>
+                {item.Icon} {item.label}
+              </AppText>
+            )}
+            value={transactionType}
+            onChange={item => setTransactionType(item.value)}
+          />
+        </InputContainer>
+        <InputContainer label="Account">
+          <AppDropdown
+            placeholder="Select Account"
+            data={accounts.map(a => ({label: a.name, value: a._id}))}
+            renderItem={item => <AppText>{item.label}</AppText>}
+            value={account}
+            onChange={item => setAccount(item.value)}
+          />
+        </InputContainer>
+        <InputContainer label="Category">
+          <AppDropdown
+            placeholder="Select Category"
+            data={categories.map(c => ({
+              label: c.name,
+              value: c._id,
+              Icon: <Ionicon name={c.icon} />,
+            }))}
+            renderItem={item => (
+              <AppText>
+                {item.Icon} {item.label}
+              </AppText>
+            )}
+            value={category}
+            onChange={item => setCategory(item.value)}
+          />
+        </InputContainer>
+
+        <InputContainer label="Amount">
+          <AppInput
+            inputMode="decimal"
+            placeholder="Enter Amount"
+            value={amount}
+            onChangeText={value => setAmount(value)}
+          />
+        </InputContainer>
+
+        <InputContainer label="Date">
+          <TouchableOpacity onPress={() => setDateModal(true)}>
+            <AppText>{transactionDate.format('DD-MM-YYYY')}</AppText>
+          </TouchableOpacity>
+        </InputContainer>
+
+        <AppModal
+          isVisible={dateModal}
+          closeModal={() => setDateModal(false)}
+          style={styles.dateModal}>
+          <View style={styles.dateModalInner}>
+            <CalendarPicker
+              selectedStartDate={transactionDate.toDate()}
+              onDateChange={d => {
+                setTransactionDate(d);
+                setDateModal(false);
+              }}
+            />
+          </View>
+        </AppModal>
+        <InputContainer label="Description">
+          <AppInput
+            multiline
+            placeholder="Description (Optional)"
+            value={description}
+            onChangeText={value => setDescription(value)}
+          />
+        </InputContainer>
+        <AppButton label="Add" onPress={createTransaction} />
+      </View>
+    </AppModal>
   );
 };
 
@@ -250,10 +235,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: 10,
   },
-  //   style={styles.dropdown}
-  //   placeholderStyle={styles.placeholderStyle}
-  //   selectedTextStyle={styles.selectedTextStyle}
-  //   inputSearchStyle={styles.inputSearchStyle}
 });
 
 export default NewTransactionModal;

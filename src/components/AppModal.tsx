@@ -1,32 +1,55 @@
 import React from 'react';
-import {Dimensions, StatusBar, StyleSheet, View, ViewStyle} from 'react-native';
+import {
+  Dimensions,
+  KeyboardAvoidingView,
+  StyleSheet,
+  ViewStyle,
+} from 'react-native';
 import Modal from 'react-native-modal';
 
 interface Props {
-  visible: boolean;
-  close: () => void;
+  isVisible: boolean;
+  closeModal: () => void;
   children: React.ReactNode;
   style?: ViewStyle;
   animationIn?: any; //TODO: add a good type here
   animationOut?: any; //TODO: add a good type here
   animationInTiming?: number;
   animationOutTiming?: number;
+  position?: 'bottom' | 'center';
 }
 
 const AppModal = ({
-  visible,
+  isVisible,
   children,
   style,
-  close,
-  animationIn,
-  animationOut,
-  animationInTiming,
-  animationOutTiming,
+  closeModal,
+  animationIn = 'bounceInUp',
+  animationOut = 'bounceOutDown',
+  animationInTiming = 700,
+  animationOutTiming = 500,
+  position = 'center',
 }: Props) => {
+  const styles = StyleSheet.create({
+    modal: {
+      margin: 0,
+    },
+    container: {
+      marginHorizontal: 10,
+      backgroundColor: '#fff',
+      borderRadius: 20,
+      borderBottomRightRadius: position === 'bottom' ? 0 : 20,
+      borderBottomLeftRadius: position === 'bottom' ? 0 : 20,
+      padding: 23,
+      display: 'flex',
+      gap: 15,
+    },
+  });
+
   return (
     <Modal
       deviceHeight={Dimensions.get('screen').height}
-      isVisible={visible}
+      isVisible={isVisible}
       statusBarTranslucent
       useNativeDriver
       useNativeDriverForBackdrop
@@ -34,22 +57,14 @@ const AppModal = ({
       animationInTiming={animationInTiming}
       animationOut={animationOut}
       animationOutTiming={animationOutTiming}
-      onBackButtonPress={close}
-      onBackdropPress={close}
+      onBackButtonPress={closeModal}
+      onBackdropPress={closeModal}
       style={styles.modal}>
-      <View style={[styles.container, style]}>{children}</View>
+      <KeyboardAvoidingView style={[styles.container, style]}>
+        {children}
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
-
-const styles = StyleSheet.create({
-  modal: {
-    margin: 0,
-  },
-  container: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
-  },
-});
 
 export default AppModal;
